@@ -1,0 +1,202 @@
+﻿<Window x:Class="Költég.Class.dataInPeriod"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Költég.Class"
+        mc:Ignorable="d"
+        Title="Részletek" Height="450" Width="500"
+           WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        >
+    <Window.Resources>
+        <Color x:Key="MainBlack">#FF101010</Color>
+        <Color x:Key="PanelBlack">#FF181818</Color>
+        <Color x:Key="AccentGreen">#FF00FF66</Color>
+        <Color x:Key="AccentGreenHover">#FF00CC55</Color>
+        <Color x:Key="TextGreen">#FF00FF66</Color>
+        <Color x:Key="CloseRed">#FFDD2C2C</Color>
+
+        <SolidColorBrush x:Key="MainBlackBrush" Color="{StaticResource MainBlack}"/>
+        <SolidColorBrush x:Key="PanelBlackBrush" Color="{StaticResource PanelBlack}"/>
+        <SolidColorBrush x:Key="AccentGreenBrush" Color="{StaticResource AccentGreen}"/>
+        <SolidColorBrush x:Key="AccentGreenHoverBrush" Color="{StaticResource AccentGreenHover}"/>
+        <SolidColorBrush x:Key="TextGreenBrush" Color="{StaticResource TextGreen}"/>
+        <SolidColorBrush x:Key="CloseRedBrush" Color="{StaticResource CloseRed}"/>
+
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextGreenBrush}" />
+            <Setter Property="Margin" Value="0 10 0 0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextGreenBrush}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0 15 0 0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource AccentGreenHoverBrush}"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,20,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse x:Name="ellipse" Fill="#FF222222" Stroke="#FF333333" StrokeThickness="1"/>
+                            <TextBlock Text="✕" Foreground="{StaticResource AccentGreenBrush}" FontSize="18" FontWeight="Bold"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ellipse" Property="Fill" Value="{StaticResource CloseRedBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DropShadowEffect x:Key="MainShadow" BlurRadius="18" ShadowDepth="0" Color="#80000000"/>
+
+        <!-- Themed DataGrid style -->
+        <Style x:Key="ThemedDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="{StaticResource PanelBlackBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextGreenBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentGreenBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="RowBackground" Value="{StaticResource PanelBlackBrush}"/>
+            <Setter Property="AlternatingRowBackground" Value="{StaticResource MainBlackBrush}"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource MainBlackBrush}"/>
+            <Setter Property="VerticalGridLinesBrush" Value="{StaticResource MainBlackBrush}"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="EnableRowVirtualization" Value="True"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="ColumnHeaderHeight" Value="34"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="Effect" Value="{StaticResource MainShadow}"/>
+
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{StaticResource MainBlackBrush}"/>
+                        <Setter Property="Foreground" Value="{StaticResource TextGreenBrush}"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="10,6"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentGreenBrush}"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource AccentGreenHoverBrush}"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{StaticResource PanelBlackBrush}"/>
+                        <Setter Property="Foreground" Value="{StaticResource TextGreenBrush}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource MainBlackBrush}"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource AccentGreenHoverBrush}"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource AccentGreenBrush}"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource MainBlackBrush}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="8,4"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Height="auto" Background="{StaticResource MainBlackBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2" Grid.Row="0" Height="60" MouseLeftButtonDown="TopBar_MouseLeftButtonDown">
+            <Border Background="{StaticResource PanelBlackBrush}"/>
+            <TextBlock Text="Részletek" FontSize="28" FontWeight="Bold" Foreground="{StaticResource AccentGreenBrush}" Margin="20,0,0,0" VerticalAlignment="Center"/>
+            <Button Style="{StaticResource CloseButtonStyle}" Click="CloseButton_Click"/>
+        </Grid>
+        <DataGrid x:Name="data"
+                  AutoGenerateColumns="False"
+                  Style="{StaticResource ThemedDataGrid}"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                   Focusable="False"
+                  Grid.Row="1" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Dátum" Binding="{Binding FormattedDate}" />
+                <DataGridTextColumn Header="Kategória" Binding="{Binding Category}" />
+                <DataGridTextColumn Header="Összeg" Binding="{Binding Amount}" />
+                <DataGridTextColumn Header="Hely" Binding="{Binding CityPlace}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
