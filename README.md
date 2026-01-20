@@ -1,1 +1,1 @@
-# BudgetBuddy
+# BudgetBuddy 💰
