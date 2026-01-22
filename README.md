@@ -5,7 +5,7 @@ BudgetBuddy is a WPF (Windows Presentation Foundation) desktop application desig
 ## 🚀 Features
 
 - **Transaction Import**: Easily import bank statements from Excel files (`.xls`, `.xlsx`) using `ExcelDataReader`. The app parses transactions and transfers automatically.
-- **Smart Categorization**: Transactions are automatically categorized based on saved aliases and location data (e.g., matching "City" or "Place" to a category).
+- **Smart Categorization**: Transactions are automatically categorized based on saved aliases and location data.
 - **Dashboard & Analytics**:
   - Visualize spending with charts.
   - Filter data by period (Week/Month) and specific dates.
