@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="BudgetBuddy.Views.Pages.CategoriesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetBuddy.Views.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="420" d:DesignWidth="670">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0" Padding="16" PreviewMouseWheel="ScrollFix">
+            <StackPanel x:Name="spL">
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Column="1" Padding="16" PreviewMouseWheel="ScrollFix">
+            <StackPanel x:Name="spR">
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

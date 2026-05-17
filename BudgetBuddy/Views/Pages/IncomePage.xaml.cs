@@ -41,9 +41,6 @@ namespace BudgetBuddy.Views.Pages
             var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
-            DatePickerFrom.SelectedDateChanged -= OnDateChanged;
-            DatePickerTo.SelectedDateChanged -= OnDateChanged;
-
             DatePickerFrom.SelectedDate = firstDayOfMonth;
             DatePickerTo.SelectedDate = lastDayOfMonth;
 
@@ -65,12 +62,13 @@ namespace BudgetBuddy.Views.Pages
 
             var hu = CultureInfo.GetCultureInfo("hu-HU");
             var total = items.Sum(x => x.Amount);
-            if(TotalLabel != null)
+            if (TotalLabel != null)
                 TotalLabel.Content = $"Összeses bevétel: {total.ToString("C", hu)}";
 
             List<ListViewModel> listView = new List<ListViewModel>();
 
-            foreach (var item in items) {
+            foreach (var item in items)
+            {
                 listView.Add(new ListViewModel
                 {
                     AmountText = item.Amount.ToString("C", hu),
@@ -79,8 +77,10 @@ namespace BudgetBuddy.Views.Pages
                 });
             }
 
-            if(TransfersListView != null)
+            if (TransfersListView != null)
+            {
                 TransfersListView.ItemsSource = listView;
+            }
         }
 
         private void OnDateChanged(object sender, SelectionChangedEventArgs e)
@@ -94,29 +94,6 @@ namespace BudgetBuddy.Views.Pages
             {
                 lv.UnselectAll();
             }
-        }
-
-        private void OnDatePickerLoaded(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private static T? FindVisualChild<T>(DependencyObject? parent) where T : DependencyObject
-        {
-            if (parent == null) return null;
-            int count = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < count; i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (child is T t) return t;
-                var result = FindVisualChild<T>(child);
-                if (result != null) return result;
-            }
-            return null;
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

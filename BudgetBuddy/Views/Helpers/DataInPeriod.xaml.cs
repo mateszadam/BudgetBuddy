@@ -18,9 +18,9 @@ namespace Költég.Class
     /// <summary>
     /// Interaction logic for dataInPeriod.xaml
     /// </summary>
-    public partial class dataInPeriod : Window
+    public partial class DataInPeriod : Window
     {
-        public dataInPeriod(List<Transaction> transactions)
+        public DataInPeriod(List<Transaction> transactions)
         {
             InitializeComponent();
             data.ItemsSource = transactions;

@@ -3,6 +3,7 @@ using BudgetBuddy.Classes;
 using BudgetBuddy.Views.Pages;
 using ExcelDataReader;
 using Microsoft.Win32;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Text;
@@ -25,6 +26,12 @@ namespace BudgetBuddy.Page
     {
         private DashboardPage DashboardPage { get; set; }
         private IncomePage IncomePage { get; set; }
+        private CategoriesPage CategoriesPage { get; set; }
+        private DataPage DataPage { get; set; }
+        private ImportPage ImportPage { get; set; }
+
+
+
 
         public MainWindow()
         {
@@ -32,9 +39,11 @@ namespace BudgetBuddy.Page
             GlobalStore.LoadDataFromJson();
             DashboardPage = new DashboardPage();
             IncomePage = new IncomePage();
+            CategoriesPage = new CategoriesPage();
+            DataPage = new DataPage();
+            ImportPage = new ImportPage();
 
-
-
+            MainContentArea.Content = DashboardPage;
         }
 
         private void Stat_Click(object sender, RoutedEventArgs e)
@@ -44,73 +53,13 @@ namespace BudgetBuddy.Page
         }
         private void Categories_Click(object sender, RoutedEventArgs e)
         {
-
+            MainContentArea.Content = CategoriesPage;
         }
 
 
         private void Data_Click(object sender, RoutedEventArgs e)
         {
-           
-        }
-
-        private void Load_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                OpenFileDialog ofd = new OpenFileDialog();
-                ofd.AddExtension = true;
-                ofd.Multiselect = false;
-                ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads\\Phone Link";
-                ofd.Filter = "Excel Files (*.xls;*.xlsx)|*.xls;*.xlsx|All Files (*.*)|*.*";
-                var result = ofd.ShowDialog();
-
-                if (result == true)
-                {
-                    string selectedFile = ofd.FileName;
-                    DataSet dataSet = null;
-
-                    System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-                    using (var stream = File.Open(selectedFile, FileMode.Open, FileAccess.Read))
-                    using (var reader = ExcelReaderFactory.CreateReader(stream))
-                    {
-
-                        // Skip unnecesary lines
-                        for (int i = 0; i < 9; i++)
-                        {
-                            reader.Read();
-                        }
-                        do
-                        {
-                            while (reader.Read())
-                            {
-                                Base data = null;
-                                if (reader.GetValue(1).ToString() == "KÁRTYATRANZAKCIÓ")
-                                    GlobalStore.Add(new Transaction(reader));
-                                else if (new[] { "ÁTUTALÁS", "EGYÉB JÓVÁÍRÁS", "EGYÉB TERHELÉS" }.Contains(reader.GetValue(1).ToString()))
-                                    GlobalStore.Add(new Transfer(reader));
-                                else
-                                {
-
-                                    string ss = reader.GetValue(1).ToString();
-                                    Console.WriteLine();
-                                    continue;
-                                }
-                            }
-                        } while (reader.NextResult());
-                    }
-
-                    if (dataSet != null && dataSet.Tables.Count > 0)
-                    {
-                        DataTable table = dataSet.Tables[0];
-                    }
-                }
-
-                GlobalStore.Store();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Hiba!", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            MainContentArea.Content = DataPage;
         }
 
         private void Income_Click(object sender, RoutedEventArgs e)
@@ -118,8 +67,24 @@ namespace BudgetBuddy.Page
             MainContentArea.Content = IncomePage;
         }
 
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            MainContentArea.Content = ImportPage;
+        }
+
+        public void Refresh()
+        {
+            DashboardPage = new DashboardPage();
+            IncomePage = new IncomePage();
+            CategoriesPage = new CategoriesPage();
+            DataPage = new DataPage();
+            ImportPage = new ImportPage();
+            MainContentArea.Content = DashboardPage;
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            GlobalStore.Store();
             this.Close();
 
         }

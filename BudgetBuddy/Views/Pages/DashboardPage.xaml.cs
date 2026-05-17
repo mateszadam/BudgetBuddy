@@ -25,30 +25,23 @@ namespace BudgetBuddy.Views.Pages
 /// <summary>
 /// Interaction logic for DashboardPage.xaml
 /// </summary>
-/// 
-public class BarViewModel
+ 
+    public class BarViewModel
     {
-        public string Category { get; set; }
-        public string ShortCategory { get; set; }
-        public string AmountText { get; set; }
+        public string? Category { get; set; }
+        public string? ShortCategory { get; set; }
+        public string? AmountText { get; set; }
         public double BarHeight { get; set; }
-        public System.Windows.Media.Brush FillBrush { get; set; }
+        public Brush? FillBrush { get; set; }
     }
 
     public partial class DashboardPage : UserControl
     {
 
         public List<SelectableItem> MyFilters { get; set; }
-        public bool _showKpLevetel { get; set; }
-
-
-
-
-
         public DashboardPage()
         {
             InitializeComponent();
-            _showKpLevetel = true;
             MyFilters = new List<SelectableItem>();
             foreach (var item in GlobalStore.Categories)
             {
@@ -60,7 +53,7 @@ public class BarViewModel
         private void StepPeriod(int direction)
         {
             DateTime date = _datePicker.SelectedDate ?? DateTime.Today;
-            string period = ((((ContentControl)_periodCombo.SelectedItem).Content.ToString()) ?? "Hónap");
+            string period = ((ContentControl)_periodCombo.SelectedItem).Content.ToString() ?? "Hónap";
 
             DateTime newDate = period == "Hét"
                 ? date.AddDays(7 * direction)
@@ -79,7 +72,7 @@ public class BarViewModel
 
 
                 DateTime date = _datePicker.SelectedDate!.Value.Date;
-                string period = ((((ContentControl)_periodCombo.SelectedItem).Content.ToString()) ?? "Hónap");
+                string period = ((ContentControl)_periodCombo.SelectedItem).Content.ToString() ?? "Hónap";
              
                 (DateTime start, DateTime end) = period == "Hét"
                     ? GetWeekRange(date)
@@ -212,12 +205,6 @@ public class BarViewModel
             StepPeriod(1);
         }
 
-        private void ToggleKpBtn_Click(object sender, RoutedEventArgs e)
-        {
-            _showKpLevetel = !_showKpLevetel;
-            RenderChart();
-        }
-
         private void DatePicker_Loaded(object sender, RoutedEventArgs e)
         {
             _datePicker.SelectedDate = DateTime.Now;
@@ -245,7 +232,7 @@ public class BarViewModel
             var transanctions = GlobalStore.Transactions.Where(x => x.Date >= start && x.Date <= end).ToList();
 
             transanctions = transanctions.Where(t => !IsKpLevetel(t.Category)).ToList();
-            dataInPeriod page = new dataInPeriod(transanctions);
+            DataInPeriod page = new DataInPeriod(transanctions);
             page.Show();
         }
 
@@ -255,9 +242,9 @@ public class BarViewModel
             {
                 byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
 
-                byte r = hash[0];
-                byte g = hash[1];
-                byte b = hash[2];
+                byte r = hash[2];
+                byte g = hash[3];
+                byte b = hash[4];
 
                 return new SolidColorBrush(Color.FromRgb(r, g, b));
             }

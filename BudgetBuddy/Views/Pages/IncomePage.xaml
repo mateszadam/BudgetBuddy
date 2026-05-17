@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BudgetBuddy.Views.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
+             d:DesignHeight="420" d:DesignWidth="670">
 
     <UserControl.Resources>
         <Style x:Key="BaseTextStyle" TargetType="TextBlock">
@@ -29,13 +29,13 @@
                         Width="160"
                         Margin="0,0,6,0"
                         SelectedDateChanged="OnDateChanged"
-                        Loaded="OnDatePickerLoaded"
+                        
                         Style="{StaticResource ModernDatePicker}"/>
 
                 <DatePicker x:Name="DatePickerTo"
                         Width="160"
                         SelectedDateChanged="OnDateChanged"
-                        Loaded="OnDatePickerLoaded"
+                        
                         Style="{StaticResource ModernDatePicker}"/>
             </StackPanel>
 

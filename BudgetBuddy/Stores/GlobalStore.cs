@@ -1,53 +1,43 @@
-﻿using ExcelDataReader;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Data;
 using BudgetBuddy.Classes;
+using BudgetBuddy.Models;
 
 namespace BudgetBuddy.Class
+
+
 {
     public class GlobalStore
     {
-        public static List<Transaction> Transactions { get; set {
-                MatchCategories();
-                field = value;
-            } 
-        } = new List<Transaction>() ;
+        public static List<Transaction> Transactions { get; set; } = new List<Transaction>();
         public static List<Transfer> Transfers { get; set; } = new List<Transfer>();
-        public static List<Aliasess> Categories {
-            get; set
-            {
-                MatchCategories();
-                field = value;
-            }
-        } = new List<Aliasess>();
+        public static List<Aliasess> Categories { get; set; } = new List<Aliasess>();
 
 
-        public static void Store()
+        public static void Store(DataType dataToSave = DataType.All)
         {
-            WriteFile(Transactions, "KoltegData.json");
-            WriteFile(Transfers, "TransferData.json");
-            WriteFile(Categories, "KategoriaData.json");
+            if (dataToSave.HasFlag(DataType.Transactions))
+            {
+                WriteFile(Transactions, "KoltegData.json");
+            }
+
+            if (dataToSave.HasFlag(DataType.Transfers))
+            {
+                WriteFile(Transfers, "TransferData.json");
+            }
+
+            if (dataToSave.HasFlag(DataType.Categories))
+            {
+                WriteFile(Categories, "KategoriaData.json");
+            }
         }
+
+
 
         private static void WriteFile<T>(List<T> data, string fileName)
         {
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string filePath = System.IO.Path.Combine(documentsPath, fileName);
-            var options = new System.Text.Json.JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
-            };
-            string json = System.Text.Json.JsonSerializer.Serialize(data, options);
-            System.IO.File.WriteAllText(filePath, json);
+            System.IO.File.WriteAllText(filePath, System.Text.Json.JsonSerializer.Serialize(data));
         }
 
         public static void LoadDataFromJson()
@@ -69,44 +59,39 @@ namespace BudgetBuddy.Class
             }
             else
             {
-                var options = new System.Text.Json.JsonSerializerOptions
-                {
-                    Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
-                };
                 string json = System.IO.File.ReadAllText(filePath);
-                return System.Text.Json.JsonSerializer.Deserialize<List<T>>(json, options) ?? new List<T>();
+                return System.Text.Json.JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
             }
         }
 
         public static void MatchCategories()
         {
-            for (int i = 0; i < Transactions.Count; i++)
-            {
-                Transactions[i].Place = Transaction.RemoveTrailingDigits(Transactions[i].Place);
-                Aliasess? a = Categories.FirstOrDefault(x => x.Places.Contains(Transactions[i].CityPlace));
-                if (a != null)
-                {
-                    Transactions[i].Category = a.Type;
-                }
-            }
+            Transactions = Transactions.Select(MatchCategory).ToList();
         }
 
-        public static void Add(Base transaction)
+        public static Transaction MatchCategory(Transaction transaction)
         {
-            if (transaction.GetType() == typeof(Transaction))
-            {
-                if (Transactions.FirstOrDefault(x => x.Description.Equals(transaction.Description) && x.Date.Equals(transaction.Date)) == null)
-                    Transactions.Add(transaction as Transaction);
-            }
-            else
-            {
-                if (Transfers.FirstOrDefault(x => x.Description.Equals(transaction.Description) && x.Date.Equals(transaction.Date)) == null)
-                    Transfers.Add(transaction as Transfer);
-            }
+            Aliasess? category = Categories.FirstOrDefault(x => x.Places.Contains(transaction.CityPlace));
+            transaction.Category = category != null ? category.Type : null;
+            return transaction;
         }
 
 
+        public static void Add(Transaction transaction)
+        {
+            if (!Transactions.Any(x => x == transaction))
+            {
+                Transactions.Add(MatchCategory(transaction));
+            }
+        }
+
+        public static void Add(Transfer transaction)
+        {
+            if (!Transfers.Any(x => x == transaction))
+            {
+                Transfers.Add(transaction);
+            }
+        }
     }
+
 }
-
-

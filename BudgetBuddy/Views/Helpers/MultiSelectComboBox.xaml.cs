@@ -48,7 +48,7 @@ namespace BudgetBuddy.Views.Helpers
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-public partial class MultiSelectComboBox : UserControl, INotifyPropertyChanged
+    public partial class MultiSelectComboBox : UserControl, INotifyPropertyChanged
         {
             public MultiSelectComboBox()
             {
@@ -80,7 +80,7 @@ public partial class MultiSelectComboBox : UserControl, INotifyPropertyChanged
                 set { SetValue(ItemsSourceProperty, value); }
             }
 
-            // 2. Dependency Property for Placeholder Text
+            
             public static readonly DependencyProperty PlaceholderProperty =
                 DependencyProperty.Register("Placeholder", typeof(string), typeof(MultiSelectComboBox),
                     new PropertyMetadata("Select Options"));
@@ -91,28 +91,24 @@ public partial class MultiSelectComboBox : UserControl, INotifyPropertyChanged
                 set { SetValue(PlaceholderProperty, value); }
             }
 
-            // 3. Observable Collection for the Chips (Visuals only)
             public ObservableCollection<SelectableItem> SelectedItems { get; set; }
 
-            // 4. Command to handle clicking the "X" on a chip
             public ICommand RemoveItemCommand { get; }
 
             private void RemoveItem(object parameter)
             {
                 if (parameter is SelectableItem item)
                 {
-                    item.IsSelected = false; // This unchecks the box
-                    UpdateSelectedList();    // This removes the chip
+                    item.IsSelected = false;
+                    UpdateSelectedList(); 
                 }
             }
 
-            // Triggered when a Checkbox in the dropdown is clicked
             private void OnItemClick(object sender, RoutedEventArgs e)
             {
                 UpdateSelectedList();
             }
 
-            // Syncs the Chips list with the Checked items
             private void UpdateSelectedList()
             {
                 if (ItemsSource == null) return;
@@ -123,7 +119,6 @@ public partial class MultiSelectComboBox : UserControl, INotifyPropertyChanged
                     SelectedItems.Add(item);
                 }
 
-                // Notify UI to update the placeholder visibility
                 OnPropertyChanged(nameof(SelectedItems));
                 RaiseEvent(new RoutedEventArgs(SelectionChangedEvent));
         }
@@ -133,7 +128,6 @@ public partial class MultiSelectComboBox : UserControl, INotifyPropertyChanged
                 => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        // Simple Command Helper
         public class RelayCommand : ICommand
         {
             private readonly Action<object> _execute;
