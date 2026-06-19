@@ -1,5 +1,4 @@
-﻿using BudgetBuddy.Classes;
-using BudgetBuddy.ViewModels;
+﻿using BudgetBuddy.ViewModels;
 using ExcelDataReader;
 using Microsoft.Win32;
 using System;

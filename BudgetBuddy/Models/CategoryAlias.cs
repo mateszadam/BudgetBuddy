@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BudgetBuddy.Classes
+namespace BudgetBuddy.Models
 {
 
         public class CategoryAlias

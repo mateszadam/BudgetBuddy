@@ -1,4 +1,4 @@
-﻿using BudgetBuddy.Classes;
+﻿using BudgetBuddy.Models;
 using BudgetBuddy.Services.Interfaces;
 using BudgetBuddy.Views.Helpers;
 using BudgetBuddy.Views.Pages;

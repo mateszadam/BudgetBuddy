@@ -1,5 +1,4 @@
-﻿using BudgetBuddy.Classes;
-using BudgetBuddy.Models;
+﻿using BudgetBuddy.Models;
 using BudgetBuddy.Services.Interfaces;
 using System;
 using System.Collections.Generic;

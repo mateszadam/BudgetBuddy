@@ -1,4 +1,4 @@
-﻿using BudgetBuddy.Classes;
+﻿using BudgetBuddy.Models;
 using BudgetBuddy.ViewModels;
 using System;
 using System.Collections.Generic;

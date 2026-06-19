@@ -1,5 +1,4 @@
-﻿using BudgetBuddy.Classes;
-using BudgetBuddy.Models;
+﻿using BudgetBuddy.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

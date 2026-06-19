@@ -6,7 +6,7 @@ using System.Text;
 using System.Transactions;
 using System.Windows.Navigation;
 
-namespace BudgetBuddy.Classes
+namespace BudgetBuddy.Models
 {
         
     public class Transaction : BaseTransaction
