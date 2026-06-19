@@ -1,9 +1,8 @@
 ﻿using BudgetBuddy.Classes;
+using BudgetBuddy.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,22 +12,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Költég.Class
+namespace BudgetBuddy.Views.Popups
 {
     /// <summary>
-    /// Interaction logic for dataInPeriod.xaml
+    /// Interaction logic for TransactionDetailsWindow.xaml
     /// </summary>
-    public partial class DataInPeriod : Window
+    public partial class TransactionDetailsWindow : Window
     {
-        public DataInPeriod(List<Transaction> transactions)
+        public TransactionDetailsWindow(IEnumerable<Transaction> transactions)
         {
             InitializeComponent();
-            data.ItemsSource = transactions;
+
+            DataContext = new TransactionDetailsViewModel(transactions);
         }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
+
         private void TopBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
@@ -36,6 +38,5 @@ namespace Költég.Class
                 DragMove();
             }
         }
-
     }
 }

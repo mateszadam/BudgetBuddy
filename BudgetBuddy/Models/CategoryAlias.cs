@@ -5,11 +5,11 @@ using System.Text;
 namespace BudgetBuddy.Classes
 {
 
-        public class Aliasess
+        public class CategoryAlias
         {
             public string Type { get; set; } = "";
             public string[] Places { get; set; } = [];
-            public Aliasess()
+            public CategoryAlias()
             {
             }
         }

@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:BudgetBuddy.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
     <Grid Background="#FF181818">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,36 +19,32 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="15">
-            <Button Content="  File megnyitása  " 
-                Style="{StaticResource AccentButton}" 
-                Click="BtnOpen_Click" 
-                Cursor="Hand"/>
-            <TextBlock x:Name="TxtFileName" 
-                   VerticalAlignment="Center" 
-                   Margin="10,0" 
-                   Foreground="#FF00FF66" 
-                   FontWeight="SemiBold"
-                   Text="Nincs file kiválasztva..."/>
+            <Button Content="Fájl megnyitása" 
+                    Style="{StaticResource AccentButton}" 
+                    Click="OnOpenFileClick" 
+                    Cursor="Hand"/>
+            
+            <TextBlock VerticalAlignment="Center" 
+                       Margin="10,0" 
+                       Foreground="#FF00FF66" 
+                       FontWeight="SemiBold"
+                       Text="{Binding FileNameText}"/>
         </StackPanel>
 
-        <Border x:Name="ConfigPanel" 
-            Grid.Row="1" 
-            Margin="15,0,15,5" 
-            Visibility="Visible">
+        <Border Grid.Row="1" Margin="15,0,15,5" 
+                Visibility="{Binding IsConfigVisible, Converter={StaticResource BoolToVis}}">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5,0,0,5">
-                    <TextBlock Text="Címsor: " 
-                           Foreground="#FF00FF66" 
-                           VerticalAlignment="Center" 
-                           FontSize="14"/>
-                    <TextBox x:Name="TxtHeaderRow" 
-                         Style="{StaticResource ModernTextBox}" 
-                         Text="0" 
-                         Width="40"
-                         Margin="10,0" 
-                         Padding="2"
-                         HorizontalContentAlignment="Center"
-                         TextChanged="TxtHeaderRow_TextChanged"/>
+                    <TextBlock Text="Címsor:" 
+                               Foreground="#FF00FF66" 
+                               VerticalAlignment="Center" 
+                               FontSize="14"/>
+                    <TextBox Style="{StaticResource ModernTextBox}" 
+                             Text="{Binding HeaderRowIndex, UpdateSourceTrigger=PropertyChanged}" 
+                             Width="40"
+                             Margin="10,0" 
+                             Padding="2"
+                             HorizontalContentAlignment="Center"/>
                 </StackPanel>
 
                 <Grid>
@@ -58,46 +58,60 @@
 
                     <StackPanel Grid.Column="0" Margin="5">
                         <TextBlock Text="Ár:" Foreground="#FF00FF66" Margin="0,0,0,5"/>
-                        <ComboBox x:Name="CmbMapAmount" Style="{StaticResource ModernComboBox}"/>
+                        <ComboBox Style="{StaticResource ModernComboBox}"
+                                  ItemsSource="{Binding AvailableColumns}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedAmountColumn, Mode=TwoWay}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Margin="5">
                         <TextBlock Text="Devizanem:" Foreground="#FF00FF66" Margin="0,0,0,5"/>
-                        <ComboBox x:Name="CmbMapCurr" Style="{StaticResource ModernComboBox}"/>
+                        <ComboBox Style="{StaticResource ModernComboBox}"
+                                  ItemsSource="{Binding AvailableColumns}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedCurrencyColumn, Mode=TwoWay}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Margin="5">
                         <TextBlock Text="Dátum:" Foreground="#FF00FF66" Margin="0,0,0,5"/>
-                        <ComboBox x:Name="CmbMapDate" Style="{StaticResource ModernComboBox}"/>
+                        <ComboBox Style="{StaticResource ModernComboBox}"
+                                  ItemsSource="{Binding AvailableColumns}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedDateColumn, Mode=TwoWay}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" Margin="5">
                         <TextBlock Text="Leírás:" Foreground="#FF00FF66" Margin="0,0,0,5"/>
-                        <ComboBox x:Name="CmbMapDesc" Style="{StaticResource ModernComboBox}"/>
+                        <ComboBox Style="{StaticResource ModernComboBox}"
+                                  ItemsSource="{Binding AvailableColumns}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedDescriptionColumn, Mode=TwoWay}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="4" Margin="5">
                         <TextBlock Text="Típus:" Foreground="#FF00FF66" Margin="0,0,0,5"/>
-                        <ComboBox x:Name="CmbMapType" Style="{StaticResource ModernComboBox}"/>
+                        <ComboBox Style="{StaticResource ModernComboBox}"
+                                  ItemsSource="{Binding AvailableColumns}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedTypeColumn, Mode=TwoWay}"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>
         </Border>
 
         <Border Grid.Row="2" Margin="15,0" BorderBrush="#FF2C2C2C" BorderThickness="1" CornerRadius="8">
-            <DataGrid x:Name="GridPreview" 
-                  AutoGenerateColumns="True" 
-                  IsReadOnly="True" 
-                  CanUserAddRows="False"
-                  HeadersVisibility="Row"
-                  LoadingRow="PreviewGrid_LoadingRow"
-                  Background="#FF101010"
-                  RowBackground="#FF181818"
-                  Foreground="#FF00FF66"
-                  HorizontalGridLinesBrush="#FF2C2C2C"
-                  VerticalGridLinesBrush="#FF2C2C2C"
-                  BorderThickness="0">
-                <DataGrid.RowHeaderStyle>
+            <DataGrid ItemsSource="{Binding PreviewData}"
+                      AutoGenerateColumns="True" 
+                      IsReadOnly="True" 
+                      CanUserAddRows="False"
+                      HeadersVisibility="Row"
+                      Background="#FF101010"
+                      RowBackground="#FF181818"
+                      Foreground="#FF00FF66"
+                      HorizontalGridLinesBrush="#FF2C2C2C"
+                      VerticalGridLinesBrush="#FF2C2C2C"
+                      BorderThickness="0">
+                 <DataGrid.RowHeaderStyle>
                     <Style TargetType="DataGridRowHeader">
                         <Setter Property="Background" Value="#FF202020"/>
                         <Setter Property="Foreground" Value="#FF00FF66"/>
@@ -110,16 +124,14 @@
             </DataGrid>
         </Border>
 
-        <Button x:Name="BtnProcess" 
-            Grid.Row="3" 
-            Content="Adatok importálása" 
-            Style="{StaticResource AccentButton}"
-            Click="BtnProcess_Click" 
-            Height="30"
-            Width="180"
-            Margin="10" 
-            FontSize="18"
-            IsEnabled="False"
-            Cursor="Hand"/>
+        <Button Grid.Row="3" 
+                Content="Adatok importálása" 
+                Style="{StaticResource AccentButton}"
+                Command="{Binding ProcessDataCommand}"
+                Height="30"
+                Width="180"
+                Margin="10" 
+                FontSize="18"
+                Cursor="Hand"/>
     </Grid>
 </UserControl>

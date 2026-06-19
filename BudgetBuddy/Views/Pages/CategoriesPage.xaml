@@ -3,23 +3,156 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:BudgetBuddy.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="420" d:DesignWidth="670">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ScrollViewer Grid.Column="0" Padding="16" PreviewMouseWheel="ScrollFix">
-            <StackPanel x:Name="spL">
-            </StackPanel>
-        </ScrollViewer>
+        <Grid Grid.Column="0" Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Column="1" Padding="16" PreviewMouseWheel="ScrollFix">
-            <StackPanel x:Name="spR">
-            </StackPanel>
-        </ScrollViewer>
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding Categories}" 
+                         SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                         Background="Transparent" BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="cardBorder" Style="{StaticResource ModernCard}" Background="#FF202020">
+                                            <ContentPresenter/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="cardBorder" Property="BorderBrush" Value="#FF00FF66"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="cardBorder" Property="Background" Value="#FF2A2A2A"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Type}" 
+                                           Foreground="#FF00FF66" FontSize="16" 
+                                           VerticalAlignment="Center" Cursor="Hand"/>
+                                <Button Grid.Column="1" Content="✕" Width="30"
+                                        Style="{StaticResource AccentButton}"
+                                        Command="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                        CommandParameter="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" 
+                         Style="{StaticResource ModernTextBox}" 
+                         Text="{Binding NewCategoryName, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Column="1" 
+                        Content="Hozzáadás" 
+                        Style="{StaticResource AccentButton}" 
+                        Margin="5,0,0,0"
+                        Command="{Binding AddCategoryCommand}"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="16">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedCategory}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding SelectedCategoryPlaces}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource ModernCard}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding}" 
+                                               Foreground="#FF00FF66" FontSize="16" 
+                                               VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1" Content="✕" Width="30"
+                                            Style="{StaticResource AccentButton}"
+                                            Command="{Binding DataContext.DeletePlaceCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AvailablePlaces.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Column="0" 
+              Style="{StaticResource ModernComboBox}"
+              ItemsSource="{Binding AvailablePlaces}"
+              SelectedItem="{Binding SelectedAvailablePlace, Mode=TwoWay}"
+              Height="40" VerticalContentAlignment="Center"/>
+
+            <Button Grid.Column="1" 
+            Content="Hozzáadás" 
+            Style="{StaticResource AccentButton}"
+            Margin="8,0,0,0" Height="40"
+            Command="{Binding AddPlaceCommand}"/>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

@@ -3,27 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:BudgetBuddy.Views.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="420" d:DesignWidth="670">
+             d:DesignHeight="420" d:DesignWidth="670"
+             >
 
-    <Border Margin="20" Background="#1E1E1E" Height="380" >
-        <StackPanel x:Name="stack">
-            <DataGrid x:Name="dataGrid"
-                  Height="380"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Background="Transparent"
-                  RowBackground="#252526"
-                  AlternatingRowBackground="#2D2D30"
-                  Foreground="#E1E1E1"
-                  BorderThickness="0"
-                  GridLinesVisibility="None"
-                  HeadersVisibility="Column"
-                  RowHeight="30"
-                  SelectionUnit="FullRow"
-                  CanUserResizeRows="False"
-                  SelectionMode="Single">
+    <Border Margin="20" Background="#1E1E1E" Height="380">
+        <StackPanel>
+            <DataGrid Height="380"
+                      ItemsSource="{Binding Transactions}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      Background="Transparent"
+                      RowBackground="#252526"
+                      AlternatingRowBackground="#2D2D30"
+                      Foreground="#E1E1E1"
+                      BorderThickness="0"
+                      GridLinesVisibility="None"
+                      HeadersVisibility="Column"
+                      RowHeight="30"
+                      SelectionUnit="FullRow"
+                      CanUserResizeRows="False"
+                      SelectionMode="Single">
 
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
@@ -51,20 +51,19 @@
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Dátum" 
-                                    Binding="{Binding FormattedDate}" 
-                                    Width="100">
+                                        Binding="{Binding FormattedDate}" 
+                                        Width="100">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
-
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Header="Kategória" 
-                                    Binding="{Binding Category}" 
-                                    Width="*">
+                                        Binding="{Binding Category}" 
+                                        Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Padding" Value="5,0"/>
@@ -74,8 +73,8 @@
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Header="Összeg" 
-                                    Binding="{Binding Amount}" 
-                                    Width="80">
+                                        Binding="{Binding Amount}" 
+                                        Width="80">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="TextAlignment" Value="Right"/>
@@ -86,8 +85,8 @@
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Header="Hely" 
-                                    Binding="{Binding CityPlace}" 
-                                    Width="1.5*">
+                                        Binding="{Binding CityPlace}" 
+                                        Width="1.5*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="VerticalAlignment" Value="Center"/>

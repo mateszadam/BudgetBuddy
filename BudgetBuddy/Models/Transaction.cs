@@ -1,4 +1,5 @@
-﻿using ExcelDataReader;
+﻿using BudgetBuddy.Models;
+using ExcelDataReader;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,33 +8,16 @@ using System.Windows.Navigation;
 
 namespace BudgetBuddy.Classes
 {
-    public class Base
-    {
-        public string? Id { get; set; }
-        public int Amount { get; set; }
-        public string Currency { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
-        public string Description { get; set; } = string.Empty;
-
-        public string FormattedDate
-        {
-            get => Date.ToString("yyyy. MM. dd.");
-        }
-
-        public static bool operator ==(Base A, Base B) { 
-            return String.Equals(A.Description, B.Description);
-        }
-        public static bool operator !=(Base A, Base B)
-        {
-            return !String.Equals(A.Description, B.Description);
-        }
-    }
-    public class Transaction : Base
+        
+    public class Transaction : BaseTransaction
     {
         public string Place
         {
             get;
-            set => field = RemoveTrailingDigits(value ?? string.Empty);
+            set {
+                string data = RemoveTrailingDigits(value ?? string.Empty);
+                field = data;
+            }
         } = string.Empty;
 
         public string Card { get; set; } = "Undefined";
@@ -43,17 +27,15 @@ namespace BudgetBuddy.Classes
         {
             get => $"{City} {Place}";
         }
-        public Transaction()
-        {
-        }
-        public Transaction(Base currdata)
-        {
-            Amount = currdata.Amount;
-            Date = currdata.Date;
-            Currency = currdata.Currency;
-            Description = currdata.Description ?? string.Empty;
 
-            string[] data = currdata.Description!.Split('\n');
+        public Transaction(int amount, string currency, DateTime date, string description)
+        {
+            Amount = amount;
+            Date = date;
+            Currency = currency;
+            Description = description;
+
+            string[] data = description.Split('\n');
 
             if (data != null && data.Length >= 4)
             {
@@ -87,28 +69,6 @@ namespace BudgetBuddy.Classes
         {
             return string.IsNullOrWhiteSpace(input) ?
                 input : System.Text.RegularExpressions.Regex.Replace(input, @"\d+$", "").TrimEnd();
-        }
-    }
-    public class Transfer : Base
-    {
-        public string Partner { get; set; } = "Undefined";
-        public string Message { get; set; } = "Undefined";
-        public Transfer(Base currdata)
-        {
-            Amount = currdata.Amount;
-            Date = currdata.Date;
-            Currency = currdata.Currency;
-
-            Description = currdata.Description ?? string.Empty;
-            string[] data = currdata.Description!.Split('\n');
-            if (data.Length >= 3)
-            {
-                Partner = data[1];
-                Message = data[2].Replace("Közlemény: ", "");
-            }
-        }
-        public Transfer()
-        {
         }
     }
 }
