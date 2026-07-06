@@ -67,15 +67,15 @@ namespace BudgetBuddy.Services
 
         public void AddTransaction(Transaction transaction)
         {
-            if (!Transactions.Exists(x => x.Id == transaction.Id))
+            if (!Transactions.Exists(x => x == transaction))
             {
-                Transactions.Add(MatchSingleCategory(transaction));
+                Transactions.Add(transaction);
             }
         }
 
         public void AddTransfer(Transfer transfer)
         {
-            if (!Transfers.Exists(x => x.Id == transfer.Id))
+            if (!Transfers.Exists(x => x == transfer))
             {
                 Transfers.Add(transfer);
             }

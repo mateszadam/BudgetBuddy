@@ -56,11 +56,14 @@ namespace BudgetBuddy.ViewModels
 
         private readonly IDataService _dataService;
         private readonly IStatementParser _statementParser;
-        public ImportViewModel(IDataService dataService, IStatementParser statementParser)
+        private readonly ICategoryPredictionService _predictionService;
+        public ImportViewModel(IDataService dataService, IStatementParser statementParser, ICategoryPredictionService predictionService)
         {
             _dataService = dataService;
             _statementParser = statementParser;
+            _predictionService = predictionService;
         }
+        
 
         [RelayCommand]
         private void LoadFile(string? filePath)
@@ -181,6 +184,19 @@ namespace BudgetBuddy.ViewModels
                 if (transactionType == "KÁRTYATRANZAKCIÓ")
                 {
                     var transaction = new Transaction(parsedAmount, parsedCurrency, parsedDate, parsedDescription);
+
+                    var exactMatch = _dataService.Categories.FirstOrDefault(x => x.Places.Contains(transaction.CityPlace));
+
+                    if (exactMatch != null)
+                    {
+                        transaction.Category = exactMatch.Type;
+                    }
+                    else
+                    {
+                        string? predictedCategory = _predictionService.PredictCategory(transaction.Place);
+                        transaction.Category = predictedCategory ?? "Undefined";
+                    }
+
                     _dataService.AddTransaction(transaction);
                 }
                 else if (transactionType is "ÁTUTALÁS" or "EGYÉB JÓVÁÍRÁS" or "EGYÉB TERHELÉS")

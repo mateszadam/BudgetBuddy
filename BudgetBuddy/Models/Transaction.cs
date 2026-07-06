@@ -68,7 +68,7 @@ namespace BudgetBuddy.Models
         public static string RemoveTrailingDigits(string input)
         {
             return string.IsNullOrWhiteSpace(input) ?
-                input : System.Text.RegularExpressions.Regex.Replace(input, @"\d+$", "").TrimEnd();
+                input : System.Text.RegularExpressions.Regex.Replace(input, @"(?:\s+\S*\d\S*)+$", "").TrimEnd();
         }
     }
 }

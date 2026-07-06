@@ -1,4 +1,5 @@
-﻿using BudgetBuddy.Services;
+﻿using BudgetBuddy.Models.ML;
+using BudgetBuddy.Services;
 using BudgetBuddy.Services.Interfaces;
 using BudgetBuddy.ViewModels;
 using BudgetBuddy.Views.Pages;
@@ -20,6 +21,8 @@ namespace BudgetBuddy
 
             services.AddSingleton<IDataService, JsonDataService>();
             services.AddSingleton<IStatementParser, ExcelStatementParser>();
+            services.AddSingleton<ICategoryPredictionService, CategoryPredictionService>();
+
 
             services.AddTransient<MainViewModel>();
             services.AddTransient<DashboardViewModel>();
@@ -30,8 +33,14 @@ namespace BudgetBuddy
 
             Services = services.BuildServiceProvider();
 
+
             var dataService = Services.GetRequiredService<IDataService>();
             dataService.LoadData();
+
+            var predictionService = Services.GetRequiredService<ICategoryPredictionService>();
+            predictionService.TrainModel(dataService.Transactions);
+
+
 
             var mainWindow = new MainWindow
             {

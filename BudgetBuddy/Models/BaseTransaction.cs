@@ -4,7 +4,7 @@ namespace BudgetBuddy.Models
 {
     public abstract class BaseTransaction
     {
-        public Guid Id { get; init; } = Guid.NewGuid();
+        public Guid Id { get; init ;  } = Guid.NewGuid();
         public int Amount { get; set; }
         public string Currency { get; set; } = string.Empty;
         public DateTime Date { get; set; }
@@ -15,14 +15,14 @@ namespace BudgetBuddy.Models
         {
             if (obj is BaseTransaction other)
             {
-                return Id == other.Id;
+                return Description == other.Description;
             }
             return false;
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return Description.GetHashCode();
         }
 
         public static bool operator ==(BaseTransaction? left, BaseTransaction? right)
